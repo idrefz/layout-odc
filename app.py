@@ -1,10 +1,9 @@
-
 import streamlit as st
 import qrcode
 from PIL import Image, ImageDraw, ImageFont
 import io
 
-TEMPLATE_PATH = "template.png"
+TEMPLATE_PATH = "template.png"  # Pastikan ukurannya 1181x1535 px (10x13 cm @ 300dpi)
 
 def generate_qr_image(odc_name, link):
     # Load template
@@ -15,15 +14,22 @@ def generate_qr_image(odc_name, link):
     qr = qr.resize((400, 400))  # Ukuran QR Code, bisa disesuaikan
 
     # Tempelkan QR ke template
-    template.paste(qr, (150, 300))  # Koordinat QR di gambar, sesuaikan
+    qr_x = 390  # Kira-kira tengah horizontal
+    qr_y = 508  # Sekitar 4.3 cm dari atas
+    template.paste(qr, (qr_x, qr_y))
 
     # Tambahkan Nama ODC
     draw = ImageDraw.Draw(template)
     try:
-        font = ImageFont.truetype("arialbd.ttf", 60)  # Pastikan font ini ada
+        font = ImageFont.truetype("arialbd.ttf", 87)  # 21.1 pt ≈ 87 px
     except:
         font = ImageFont.load_default()
-    draw.text((150, 220), odc_name, font=font, fill="black")
+
+    # Posisi teks ODC di sekitar 2.5 cm dari atas
+    text = odc_name.upper()
+    text_x = 390  # Sesuaikan supaya rata tengah QR
+    text_y = 295
+    draw.text((text_x, text_y), text, font=font, fill="black")
 
     return template
 
