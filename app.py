@@ -19,17 +19,20 @@ def generate_qr_image(odc_name, link):
     template.paste(qr, (qr_x, qr_y))
 
     # Tambahkan Nama ODC
-    draw = ImageDraw.Draw(template)
-    try:
-        font = ImageFont.truetype("arialbd.ttf", 87)  # 21.1 pt ≈ 87 px
-    except:
-        font = ImageFont.load_default()
+  # Tambahkan Nama ODC (lebih besar, posisi lebih turun)
+draw = ImageDraw.Draw(template)
+try:
+    font = ImageFont.truetype("arialbd.ttf", 140)  # Lebih besar dari sebelumnya
+except:
+    font = ImageFont.load_default()
 
-    # Posisi teks ODC di sekitar 2.5 cm dari atas
-    text = odc_name.upper()
-    text_x = 390  # Sesuaikan supaya rata tengah QR
-    text_y = 295
-    draw.text((text_x, text_y), text, font=font, fill="black")
+text = odc_name.upper()
+text_width, text_height = draw.textbbox((0, 0), text, font=font)[2:4]
+text_x = (template.width - text_width) // 2
+text_y = 340  # Digeser ke bawah agar tidak terlalu atas
+
+draw.text((text_x, text_y), text, font=font, fill="black")
+
 
     return template
 
